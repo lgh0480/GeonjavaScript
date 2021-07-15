@@ -1,0 +1,10 @@
+[{"id":1,"first_name":"Max","last_name":"Rosling","email":"mrosling0@boston.com","gender":"Male"},
+{"id":2,"first_name":"Jolyn","last_name":"Muckley","email":"jmuckley1@mysql.com","gender":"Male"},
+{"id":3,"first_name":"Karol","last_name":"Broker","email":"kbroker2@ft.com","gender":"Female"},
+{"id":4,"first_name":"Orelle","last_name":"Curryer","email":"ocurryer3@pcworld.com","gender":"Bigender"},
+{"id":5,"first_name":"Mina","last_name":"Allebone","email":"mallebone4@delicious.com","gender":"Genderfluid"},
+{"id":6,"first_name":"Federico","last_name":"Dissman","email":"fdissman5@360.cn","gender":"Genderqueer"},
+{"id":7,"first_name":"Guilbert","last_name":"Sutlieff","email":"gsutlieff6@harvard.edu","gender":"Agender"},
+{"id":8,"first_name":"Maurizia","last_name":"Dolby","email":"mdolby7@liveinternet.ru","gender":"Non-binary"},
+{"id":9,"first_name":"Kimmi","last_name":"Stanaway","email":"kstanaway8@salon.com","gender":"Male"},
+{"id":10,"first_name":"Merle","last_name":"Cogin","email":"mcogin9@cisco.com","gender":"Female"}]

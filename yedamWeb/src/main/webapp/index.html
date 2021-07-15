@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+</head>
+<body>
+	<h1>반갑~습니다~ 반갑 습니다~~</h1>
+	<form id='frm' action ="RegisterServlet" method="get">  <!--여기다가 값을 던지겠습니다-->
+		아이디:<input type="text" name="eid"><br>
+		성:<input type="text" name="last_name"><br>
+		이메일:<input type="text" name="email"><br>
+		입사일:<input type="date" name="hire_date"><br>
+		이름:<input type="text" name="first_name"><br>
+		<button type="button" onclick="frm_submit()">저장</button>
+		<button type="button" onclick="frm_update()">수정</button>
+		<button type="button" onclick="frm_delete()">삭제</button>
+			
+	</form>
+	<div id='show'></div>
+	<script src="js/test.js"></script>
+</body>
+</html>
