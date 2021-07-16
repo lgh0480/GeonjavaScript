@@ -46,8 +46,8 @@ function makeCommentView(comment) {
 	div.comment = comment; // {id:1, name:'user', content:'test'}
 	let str = '<strong>' + comment.name + '</strong>' +
 		comment.content +
-		'<input type="button" value="수정" onclick="viewUpdateForm('+ comment.id + ')">' +
-		'<input type="button" value="삭제" onclick="confirmDeletion('+ comment.id + ')">';
+		'<input type="button" value="수정" onclick="viewUpdateForm(' + comment.id + ')">' +
+		'<input type="button" value="삭제" onclick="confirmDeletion(' + comment.id + ')">';
 	div.innerHTML = str;// <div><strong>ddd</strong></div>
 	return div;
 }
@@ -70,7 +70,7 @@ function addComment() {
 	let xhtp = new XMLHttpRequest(); //특정 위치에있는 파일을 읽어오는거 
 	xhtp.open('get', '../CommentsServ?cmd=insert' + param);
 	xhtp.send();
-	
+
 	xhtp.onreadystatechange = addResult;
 }
 // 등록 콜백 함수.
@@ -83,11 +83,11 @@ function addResult() {
 		let listDiv = document.getElementById('commentList');
 		if (code == "success") {
 			let comment = JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
-			
+
 			listDiv.appendChild(makeCommentView(comment));
 			addForm.name.value = '';
-			addForm.content.value ='';
-			alert("등록했습니다! ["+comment.id + " ] ");
+			addForm.content.value = '';
+			alert("등록했습니다! [" + comment.id + " ] ");
 		} else if (code == "error") {
 			alert("비상 오대기 비상! 에러!! 에러!! 에러!!! ");
 		}
@@ -99,12 +99,16 @@ function addResult() {
 function viewUpdateForm(commentId) {
 	let commentDiv = document.getElementById(commentId); //id 값으로 요소릉 찾아오겠음 <div></div>
 	let updateFormDiv = document.getElementById('commentUpdate');
-	
+
 	commentDiv.appendChild(updateFormDiv); // 수정화면에 id 기준으로 정보를 보여줌.
 	let comment = commentDiv.comment; // id, name, content 정보불러 오겠음. makeCommentView(comment)에 만들어놨던것
 	updateForm.id.value = comment.id;
 	updateForm.name.value = comment.name;
 	updateForm.content.value = comment.content;
 	updateFormDiv.style.display = 'block';
+
+}
+
+function updateComment() {
 	
 }
