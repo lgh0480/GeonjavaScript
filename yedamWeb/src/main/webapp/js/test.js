@@ -221,3 +221,9 @@ function frm_delete() {
 		}
 	}
 }	
+
+//document.getElementById('btnDel').addEventListener('click',frm_delete);
+
+		//function frm_delete() {
+		//console.log(this.getAttribute('id'));
+//}

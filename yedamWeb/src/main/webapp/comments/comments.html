@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>comments.html</title>
+<script src="../js/comments.js">
+	
+</script>
+</head>
+<body>
+	<div id='commentList'></div>
+	<!-- 글등록  -->
+	<div id='commentAdd'>
+		<form action="" name='addForm'>
+			이름: <input type='text' name='name' size='10'><br>
+			내용: <textarea name='content' cols='20' rows='2'></textarea>	
+				  <input type='button' value='등록' onclick='addComment()'>
+		</form>
+	</div>
+	
+	<!-- 글수정 -->
+	<div id ='commentUpdate' style='display: none'>
+		<form action='' name='updateForm'>
+			<input type='hidden' name='id' value=''>
+			이름: <input type = 'text' name='name' size='10'><br>
+			내용: <textarea name='content' cols='20' rows='2'></textarea><br>
+				  <input type="button" value='변경' onclick='updateComment()'>
+				  <input type="button" value='입력취소' onclick='cancelUpdate()'>
+				  
+				  
+		</form>
+	</div>
+</body>
+</html>
