@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>jquery.html</title>
+	<script src="js/jquery-3.6.0.min.js"></script>
+	<script>
+		$(document).ready(() => {
+			$('#show').html('<b>Hello, World</b>');
+			
+			
+			const ulTag = $('<ul />').attr('id','fruit').append(
+				$('<li />').text('Apple'),
+				$('<li />').text('Banana'),
+				$('<li />').text('Cherry')
+			);
+			//$(ulTag).css('background-color', 'yellow').css('color','red');
+			$(ulTag).css({
+					'background-color':'yellow',
+					'color':'red'});
+			$('#show').append(ulTag);
+
+			$('#delBtn').on('click',delFunc);
+			
+			console.log($('#show').html());
+		}); 			//( ) 선택자 .  가 .ready 준비가 되면
+
+		// 삭제버튼 클릭시 콜백함수.
+		function delFunc() {
+			$('#show > ul > li').last().remove();
+		}
+	</script>
+</head>
+<body>
+	<button id="delBtn">삭제</button>
+	<div id="show"></div>
+		<!-- <ul>
+			<li>apple</li> 
+			<li>Banana</li>
+			<li>Cherry</li>  
+		-->
+</body>
+</html>

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>comments.html</title>
+<script src="../js/jquery-3.6.0.min.js">
+	
+</script>
+<script>
+window.onload = function() { //화면이 로딩될때 
+
+	loadCommentList();
+}
+
+// 목록조회 ..
+function loadCommentList() {
+	// // ajax ... 호출.. 서블릿 호출..
+	// let xhtp = new XMLHttpRequest(); //특정 위치에있는 파일을 읽어오는거 
+	// xhtp.open('get', '../CommentsServ?cmd=selectAll');
+	// xhtp.send();
+	// xhtp.onreadystatechange = loadCommentResult;
+	
+	$.ajax({
+		url: '../CommentsServ', //요청페이지
+		data: {
+			cmd: 'selectAll'
+		},
+		success: loadCommentResult,
+		error: function(){
+			alert('에러발생');
+		}
+	});
+}
+
+// 조회결과..
+function loadCommentResult(result) {
+	//console.log(result);
+	let xmp = new DOMParser();
+	let xmlDoc = xmp.parseFromString(result, 'text/xml');
+	let code = $(xmlDoc).find('code').html();
+	let listDiv = $('#commentList');
+	if(code == 'success') {
+		let commentList = eval($(xmlDoc).find('data').html());
+		for(let i = 0 ; i < commentList.length; i++) {
+			listDiv.append(makeCommentView(commentList[i]));
+		}
+	} 
+	
+	console.log(code);
+	// if (this.readyState == 4 && this.status == 200) {
+	// 	let xmp = new DOMParser();
+	// 	let xmlDoc = xmp.parseFromString(this.responseText, 'text/xml');
+	// 	let code = xmlDoc.getElementsByTagName('code')[0].innerHTML;
+	// 	console.log(code);
+	// 	let listDiv = document.getElementById('commentList');
+	// 	if (code == 'success') {
+	// 		let commentList = eval(xmlDoc.getElementsByTagName('data')[0].innerHTML);
+	// 		console.log(commentList);
+	// 		for (let i = 0; i < commentList.length; i++) {
+	// 			console.log(commentList[i]);
+	// 			listDiv.appendChild(makeCommentView(commentList[i]));
+	// 		}
+	// 	}
+	// 	//eval 사용함으로 xml 형식을 알아서 계산 가능
+		console.log(commentList);
+
+}
+	//console.log(xmlDoc);
+
+//}
+
+// 한건을 화면보여줌
+function makeCommentView(comment) {
+	let div = $('<div />');  //document.createElement('div'); //let div = $('div');
+	$(div).attr('id', comment.id); //div.setAttribute('id', comment.id);
+	$(div).addClass('comment');  //div.className = 'comment'; //$().addClass('comment')
+	//div.comment = comment; // {id:1, name:'user', content:'test'}
+	$(div).data('obj',comment);  	
+	let str = '<strong>' + comment.name + '</strong>' +
+		comment.content +
+		'<input type="button" value="수정" onclick="viewUpdateForm(' + comment.id + ')">' +
+		'<input type="button" value="삭제" onclick="confirmDeletion(' + comment.id + ')">';
+    $(div).html(str);	//div.innerHTML = str;// <div><strong>ddd</strong></div>
+	return div;
+}
+// 한건 등록..
+function addComment() {
+	let name = addForm.name.value;
+	if (name == "") {
+		alert("이름 입력..");
+		addForm.name.focus();
+		return;
+	}
+	let content = addForm.content.value;
+	if (content == "") {
+		alert("내용 입력..");
+		addForm.content.focus();
+		return;
+	}
+	//let param = "&name=" + name + "&content=" + content;
+	// ajax 호출..
+	$.ajax({
+		url: '../CommentsServ',
+		data: {
+			cmd: 'insert',
+			name: name,
+			content: content
+		},
+		success: addResult,
+		error: function(){
+			alert('등록 에러발생');
+		}
+	});
+	// let xhtp = new XMLHttpRequest(); //특정 위치에있는 파일을 읽어오는거 
+	// xhtp.open('get', '../CommentsServ?cmd=insert' + param);
+	// xhtp.send();
+
+	// xhtp.onreadystatechange = addResult;
+}
+// 등록 콜백 함수.
+function addResult(result) {
+	let xmp = new DOMParser();
+	let xmlDoc = xmp.parseFromString(result, 'text/xml');
+	let code = $(xmlDoc).find('code').html();
+	let listDiv = $('#commentList');
+	if(code == 'success') {
+		let comment = JSON.parse($(xmlDoc).find('data').html());
+		listDiv.append(makeCommentView(comment));
+		addForm.name.value = '';
+		addForm.content.value = '';
+		alert("등록완 ["+comment.id+"]");	
+	} else if (code == "error") {
+		alert("오대기 비상!");
+	}
+
+	// if (this.readyState == 4 && this.status == 200) {
+	// 	let xmp = new DOMParser();
+	// 	let xmlDoc = xmp.parseFromString(this.responseText, 'text/xml');
+	// 	let code = xmlDoc.getElementsByTagName('code').item(0).innerHTML;
+	// 	console.log(xmlDoc);
+	// 	let listDiv = document.getElementById('commentList');
+	// 	if (code == "success") {
+	// 		let comment = JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
+
+	// 		listDiv.appendChild(makeCommentView(comment));
+	// 		addForm.name.value = '';
+	// 		addForm.content.value = '';
+	// 		alert("등록했습니다! [" + comment.id + " ] ");
+	// 	} else if (code == "error") {
+	// 		alert("비상 오대기 비상! 에러!! 에러!! 에러!!! ");
+	// 	}
+	// 	console.log(xmlDoc);
+	// }
+}
+
+//수정 화면..
+function viewUpdateForm(commentId) {
+	let commentDiv = $('#'+ commentId);//document.getElementById(commentId); //id 값으로 요소릉 찾아오겠음 <div></div>
+	let updateFormDiv = $('#commentUpdate');//document.getElementById('commentUpdate');
+
+	$(commentDiv).after(updateFormDiv);//commentDiv.after(updateFormDiv); // 수정화면에 id 기준으로 정보를 보여줌.
+	let comment = $(commentDiv).data('obj');//commentDiv.comment; // id, name, content 정보불러 오겠음. makeCommentView(comment)에 만들어놨던것
+	console.log(comment);
+	updateForm.id.value = comment.id;
+	updateForm.name.value = comment.name;
+	updateForm.content.value = comment.content;
+	$(updateFormDiv).css('display','block'); //updateFormDiv.style.display = 'block';
+
+}
+// ajax  수정  호출
+function updateComment() {
+	const id = document.updateForm.id.value;
+	const name = document.updateForm.name.value;
+	const content = document.updateForm.content.value;
+
+	$.ajax({
+		url: '../CommentsServ',
+		data: {
+			cmd: 'update',
+			id: id,
+			name: name,
+			content: content
+		},
+		success:updateResult,
+		error : function() {
+			alert("수정 오류 발생 ");
+		}
+	});
+
+	// const param = '?cmd=update&id=' + id + '&name=' + name + '&content=' + content;
+	// let xhtp = new XMLHttpRequest();
+	// xhtp.open('get', '../CommentsServ' + param); // 요청방식, 요청페이지 ..은 경로를 맞추기 위해서
+	// xhtp.send();
+	// xhtp.onreadystatechange = updateResult;
+}
+
+// ajax 호출 콜백함수.
+function updateResult(result) {
+	console.log(result);
+	const xmlDoc = result;
+	let code = $(xmlDoc).find('code').html();
+	console.log(code);
+	if(code == 'success') {
+		let comment = JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
+		//const comment = JSON.parse($(xmlDoc).find('data').text);
+		const listDiv = $('#commentList');
+		const commentDiv = makeCommentView(comment);
+
+		const oldCommentDiv = $('#'+comment.id);
+		$(oldCommentDiv).replaceWith(commentDiv); //listDiv.replaceChild(commentDiv, oldCommentDiv);
+		$('#commentUpdate').css('display', 'none');
+		alert('수정 완!');
+	}else {
+		alert('수정 구문 오류!!');
+	}
+	
+	
+	// if (this.readyState == 4) {
+	// 	if (this.status == 200) {
+	// 		console.log(this.responseXML);
+	// 		const xmlDoc = this.responseXML;
+	// 		const code = xmlDoc.getElementsByTagName('code')[0].firstChild.nodeValue;
+	// 		if (code == 'success') {
+	// 			//let comment = JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
+	// 			console.log(xmlDoc.getElementsByTagName('data')[0]);
+	// 			const comment = JSON.parse(xmlDoc.getElementsByTagName('data')[0].firstChild.nodeValue);
+	// 			const listDiv = document.getElementById('commentList');
+	// 			const commentDiv = makeCommentView(comment);
+	// 			const oldCommentDiv = document.getElementById(comment.id);
+	// 			listDiv.replaceChild(commentDiv, oldCommentDiv);
+	// 			document.getElementById('commentUpdate').style.display = 'none';
+	// 			alert('수정완료옷!');
+	// 		} else {
+	// 			alert('Error!');
+	// 		}
+	// 	}
+	// }
+}
+
+//취소버튼.
+function cancelUpdate() {
+	document.getElementById('commentUpdate').style.display = 'none';
+
+}
+
+//삭제처리
+function confirmDeletion(id) {
+	$.ajax({
+		url: '../CommentsServ',
+		data: {
+			cmd: 'delete',
+			id : id
+		},
+		success:deleteResult,
+		error : function() {
+			alert("삭제 오류 발생 ");
+		}
+	});
+	
+	// const xhtp = new XMLHttpRequest();
+	// xhtp.open('get', '../CommentsServ?cmd=delete&id=' + id);
+	// xhtp.send();
+	// xhtp.onreadystatechange = deleteResult;
+
+}
+
+//삭제 콜백함수.
+function deleteResult(result) {
+			console.log(result);
+			const xmlDoc = result;
+			const code = $(xmlDoc).find('code').html(); //xmlDoc.getElementsByTagName('code')[0].firstChild.nodeValue;
+			if (code == 'success') {
+				let comment = JSON.parse($(xmlDoc).find('data').html()); //JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
+				//const comment = eval(xmlDoc.getElementByTagName('data')[0].firstChild.nodeValue);
+				const listDiv = $('#commentList'); //document.getElementById('commentList');
+				const commentDiv = makeCommentView(comment);
+				const oldCommentDiv = $('#' + comment.id);+//document.getElementById(comment.id);
+				$(oldCommentDiv).remove();//listDiv.removeChild(oldCommentDiv);
+				$('#confirmDeletion').css('display','none');
+				console.log(result);
+				alert('삭제완료옷!');
+			} else {
+				alert('Error!');
+			}
+	
+}
+</script>
+</head>
+<body>
+	<div id='commentList'></div>
+	<!-- 글등록  -->
+	<div id='commentAdd'>
+		<form action="" name='addForm'>
+			이름: <input type='text' name='name' size='10'><br> 내용:
+			<textarea name='content' cols='20' rows='2'></textarea>
+			<input type='button' value='등록' onclick='addComment()'>
+		</form>
+	</div>
+
+	<!-- 글수정 -->
+	<div id='commentUpdate' style='display: none'>
+		<form action='' name='updateForm'>
+			<input type='hidden' name='id' value=''> 이름: <input
+				type='text' name='name' size='10'><br> 내용:
+			<textarea name='content' cols='20' rows='2'></textarea>
+			<br> <input type="button" value='변경' onclick='updateComment()'>
+			<input type="button" value='입력취소' onclick='cancelUpdate()'>
+
+
+		</form>
+	</div>
+	<script>
+		document.getElementById('commentList').innerHTML = '<h3>Hello</h3>';
+	</script>
+</body>
+</html>

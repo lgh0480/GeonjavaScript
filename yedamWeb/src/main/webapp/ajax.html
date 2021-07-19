@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ajax.html</title>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(onLoadFunc);
+
+        function onLoadFunc() {
+            $.ajax({
+                url: 'MOCK_DATA.json', //호출할 페이지.
+                //data:'', //파라미터로 사용할 값.
+                //성공하면 successCallBack 불러오고
+                //실패하면 errorCallBack 불러온다.
+                success: successCallBack,
+                error : errorCallBack
+               
+            });
+        }
+
+        function successCallBack(result) {
+            const ulTag = $('<ul />');
+            for(let i =0; i< result.length; i++ ){
+               let liTag =  $('<li />').attr('id',result[i].id)
+                .html('<strong>'+result[i].first_name+'-'+result[i].last_name+ '</strong>');
+                ulTag.append(liTag);
+            }
+            $('#show').append(ulTag);
+        }
+        function errorCallBack() {
+
+        }
+    </script>
+</head>
+<body>
+    <div id="show"></div>
+</body>
+</html>

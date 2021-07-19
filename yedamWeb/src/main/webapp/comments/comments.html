@@ -3,7 +3,7 @@
 <head>
 	<meta charset="UTF-8">
 	<title>comments.html</title>
-<script src="../js/comments.js">
+<script src="../js/comment.js">
 	
 </script>
 </head>
@@ -26,9 +26,12 @@
 			내용: <textarea name='content' cols='20' rows='2'></textarea><br>
 				  <input type="button" value='변경' onclick='updateComment()'>
 				  <input type="button" value='입력취소' onclick='cancelUpdate()'>
-				  
+				 
 				  
 		</form>
 	</div>
+	<script>
+		document.getElementById('commentList').innerHTML = '<h3>Hello</h3>';
+	</script>
 </body>
 </html>

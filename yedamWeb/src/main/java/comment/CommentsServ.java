@@ -53,7 +53,26 @@ public class CommentsServ extends HttpServlet {
 			comment.setName(request.getParameter("name"));
 			HashMap<String, Object> map = CommentsDAO.getInstance().insert(comment);
 			out.println(toXML(map));
+		} else if(cmd.equals("update")) {
+			response.setContentType("text/xml;charset=utf-8");
+			
+			Comments comment = new Comments();
+			comment.setId(request.getParameter("id"));
+			comment.setName(request.getParameter("name"));
+			comment.setContent(request.getParameter("content"));
+			HashMap<String, Object> map = CommentsDAO.getInstance().update(comment);
+			out.println(toXML(map)); // Ajax 호출
+		
+		} else if (cmd.equals("delete")) {
+			response.setContentType("text/xml;charset=utf-8");
+			
+			Comments comment = new Comments();
+			comment.setId(request.getParameter("id"));
+			HashMap<String, Object> map = CommentsDAO.getInstance().delete(comment);
+			out.println(toXML(map));
 		}
+	
+	
 	}
 	
 	private String toXML(HashMap<String, Object> map) {
@@ -63,7 +82,7 @@ public class CommentsServ extends HttpServlet {
 		sb.append(map.get("code"));
 		sb.append("</code>");
 		sb.append("<data>");
-		Gson gson = new GsonBuilder().create();   //여기 구문은 이해가 되지않는다.
+		Gson gson = new GsonBuilder().create();   //여기 구문은 이해가 되지않는다 
 		sb.append(gson.toJson(map));
 		sb.append("</data>");
 		sb.append("</result>");

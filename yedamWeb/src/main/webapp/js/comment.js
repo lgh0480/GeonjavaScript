@@ -2,8 +2,10 @@
  * 
  */
 window.onload = function() { //화면이 로딩될때 
+
 	loadCommentList();
 }
+
 
 // 목록조회 ..
 function loadCommentList() {
@@ -100,7 +102,7 @@ function viewUpdateForm(commentId) {
 	let commentDiv = document.getElementById(commentId); //id 값으로 요소릉 찾아오겠음 <div></div>
 	let updateFormDiv = document.getElementById('commentUpdate');
 
-	commentDiv.appendChild(updateFormDiv); // 수정화면에 id 기준으로 정보를 보여줌.
+	commentDiv.after(updateFormDiv); // 수정화면에 id 기준으로 정보를 보여줌.
 	let comment = commentDiv.comment; // id, name, content 정보불러 오겠음. makeCommentView(comment)에 만들어놨던것
 	updateForm.id.value = comment.id;
 	updateForm.name.value = comment.name;
@@ -108,7 +110,75 @@ function viewUpdateForm(commentId) {
 	updateFormDiv.style.display = 'block';
 
 }
-
+// ajax  수정  호출
 function updateComment() {
-	
+	const id = document.updateForm.id.value;
+	const name = document.updateForm.name.value;
+	const content = document.updateForm.content.value;
+	const param = '?cmd=update&id=' + id + '&name=' + name + '&content=' + content;
+	let xhtp = new XMLHttpRequest();
+	xhtp.open('get', '../CommentsServ' + param); // 요청방식, 요청페이지 ..은 경로를 맞추기 위해서
+	xhtp.send();
+	xhtp.onreadystatechange = updateResult;
+}
+
+// ajax 호출 콜백함수.
+function updateResult() {
+	if (this.readyState == 4) {
+		if (this.status == 200) {
+			console.log(this.responseXML);
+			const xmlDoc = this.responseXML;
+			const code = xmlDoc.getElementsByTagName('code')[0].firstChild.nodeValue;
+			if (code == 'success') {
+				//let comment = JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
+				console.log(xmlDoc.getElementsByTagName('data')[0]);
+				const comment = JSON.parse(xmlDoc.getElementsByTagName('data')[0].firstChild.nodeValue);
+				const listDiv = document.getElementById('commentList');
+				const commentDiv = makeCommentView(comment);
+				const oldCommentDiv = document.getElementById(comment.id);
+				listDiv.replaceChild(commentDiv, oldCommentDiv);
+				document.getElementById('commentUpdate').style.display = 'none';
+				alert('수정완료옷!');
+			} else {
+				alert('Error!');
+			}
+		}
+	}
+}
+
+//취소버튼.
+function cancelUpdate() {
+	document.getElementById('commentUpdate').style.display = 'none';
+
+}
+
+//삭제처리
+function confirmDeletion(id) {
+	const xhtp = new XMLHttpRequest();
+	xhtp.open('get', '../CommentsServ?cmd=delete&id=' + id);
+	xhtp.send();
+	xhtp.onreadystatechange = deleteResult;
+
+}
+
+//삭제 콜백함수.
+function deleteResult() {
+	if (this.readyState == 4) {
+		if (this.status == 200) {
+			console.log(this.responseXML);
+			const xmlDoc = this.responseXML;
+			const code = xmlDoc.getElementsByTagName('code')[0].firstChild.nodeValue;
+			if (code == 'success') {
+				let comment = JSON.parse(xmlDoc.getElementsByTagName('data').item(0).innerHTML);
+				//const comment = eval(xmlDoc.getElementByTagName('data')[0].firstChild.nodeValue);
+				const listDiv = document.getElementById('commentList');
+				const commentDiv = makeCommentView(comment);
+				const oldCommentDiv = document.getElementById(comment.id);
+				listDiv.removeChild(oldCommentDiv);
+				alert('삭제완료옷!');
+			} else {
+				alert('Error!');
+			}
+		}
+	}
 }

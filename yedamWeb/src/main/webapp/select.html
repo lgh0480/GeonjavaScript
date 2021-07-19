@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8">
+	<title>select.html</title>
+	<script src='js/jquery-3.6.0.min.js'>
+	
+	</script>
+</head>
+
+<body>
+	<h3>선택한 option을 상대편으로 넘기기.</h3>
+	<form>
+		<select name='subject' class='subject' size='10'>
+			<option>축구1</option>
+			<option>축구2</option>
+			<option>축구3</option>
+			<option>축구4</option>
+			<option>축구5</option>
+		</select>
+		<button type='button' id='plus'>+</button>
+		<button type='button' id='minus'>-</button>
+		<select name='reject' class='reject' size='10'>
+			<option>야구1</option>
+			<option>야구2</option>
+			<option>야구3</option>
+			<option>야구4</option>
+			<option>야구5</option>
+
+		</select>
+	</form>
+	<script>
+		$('#plus').on('click',function(){
+			console.log($('.suject option').eq(0));
+			//console.log($('.subject option:selected')); //선택된 값.
+			//$('.reject').append($('select[name="subject"] option:selected'));
+			$('select').eq(1).append($('select:eq(0) option:selected'));
+		}); 
+		$('#minus').on('click',function(){
+			console.log($(this));
+			//console.log($('.reject option:selected'));
+			//$('.subject').append($('select[name="reject"] option:selected'));
+			$('select').eq(0).append($('select:eq(1) option:selected'));
+		});
+	</script>
+</body>
+
+</html>
