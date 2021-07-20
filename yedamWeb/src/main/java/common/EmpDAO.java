@@ -1,4 +1,4 @@
-package common;
+ package common;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -28,6 +28,7 @@ public class EmpDAO {
 				emp.setFirstName(rs.getString("first_name"));
 				emp.setHireDate(rs.getString("hire_date").substring(0,10));
 				emp.setLastName(rs.getString("last_name"));
+				
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -68,6 +69,7 @@ public class EmpDAO {
 			emp.setLastName(rs.getString("last_name"));
 			emp.setEmail(rs.getString("email"));
 			emp.setHireDate(rs.getString("hire_date").substring(0,10));
+			emp.setSalary(rs.getInt("salary"));
 			empList.add(emp);
 		}
 		

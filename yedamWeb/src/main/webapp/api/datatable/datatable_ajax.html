@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>api/datatable/datatable_ajax.html</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+	<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+	<script>
+		$(document).ready(function () {
+			$('#example').DataTable({
+				"ajax": '../../EmpJsonServ2',
+				"columns": [
+            { "data": "employeeId" },
+            { "data": "firstName" },
+            { "data": "lastName" },
+            { "data": "email" },
+            { "data": "hireData" },
+            { "data": "salary" }
+        ]
+			});
+		});
+		// api/datatable/html
+		// EmpJsonServ
+	</script>
+
+</head>
+
+<body>
+	<table id="example" class="display" style="width:100%">
+		<thead>
+			<tr>
+				<th>EmployeeId</th>
+				<th>first_name</th>
+				<th>last_name</th>
+				<th>Email</th>
+				<th>HireDate</th>
+				<th>Salary</th>
+			</tr>
+		</thead>
+
+		<tfoot>
+			<tr>
+				<th>EmployeeId</th>
+				<th>first_name</th>
+				<th>last_name</th>
+				<th>Email</th>
+				<th>HireDate</th>
+				<th>Salary</th>
+			</tr>
+		</tfoot>
+	</table>
+</body>
+
+</html>

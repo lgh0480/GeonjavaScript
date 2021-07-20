@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exam02.html</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $.ajax({
+            url: 'employees.xml',
+            success: showEmployee,
+            error: function(e) {
+                console.log(e);
+            }
+        })
+        function showEmployee(result) {
+            console.log(result);
+            let container = document.querySelector('.show'); //show 클래스를 가져옴
+            // xml
+            let records = result.querySelectorAll('record');
+            console.log(records[0]);
+            // xml
+            for(let row of records) {
+                console.log(row);
+                let ul = document.createElement('ul');
+                // xml
+                let rows = row.childNodes;
+                    console.log(row.childNodes);
+                for(let i=0; i<rows.length; i++) {
+                    //console.log(rows[i].innerHTML);
+                    let li = document.createElement('li');
+                    let span = document.createElement('span');
+                    span.classList.add('smallTitle');
+                    span.innerHTML += rows[i].tagName;
+                    span.innerHTML = span.innerHTML.toUpperCase();
+                    li.appendChild(span);
+                    
+                    li.innerHTML += " : " + rows[i].innerHTML;
+                    console.log(li.innerHTML);
+                    
+                    ul.appendChild(li);
+                }
+                container.appendChild(ul);
+            }
+        }
+    </script>    
+</head>
+
+<body>
+    <div class='show'></div>
+</body>
+
+</html>

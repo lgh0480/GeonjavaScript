@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>exam01.html</title>
+    <script src='members.json'></script>
+    <!-- google CDN -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script>
+        $.ajax({
+            url: 'members.json',
+            success: showTable,
+            error: function(e) {
+                console.log(e);
+            }
+        })
+        function showTable(result){
+            console.log(result);
+        let tableTag = document.createElement('table');
+        tableTag.setAttribute('border', '1');
+
+        let titleTr = document.createElement('tr');
+        let titleTh = document.createElement('th');
+        titleTh.setAttribute('colspan', '6');
+        let title = document.createTextNode('사원정보')
+        titleTh.appendChild(title);
+        titleTr.appendChild(titleTh);
+        tableTag.appendChild(titleTr);
+        
+        for (let row of result) { // 데이터..(tr)
+            let trTag = document.createElement('tr');
+
+
+            for (let field in row) {
+                let tdTag = document.createElement('td');
+                let text = document.createTextNode(row[field]);
+                tdTag.appendChild(text);
+
+                trTag.appendChild(tdTag);
+            }
+            tableTag.appendChild(trTag);
+
+
+
+        }
+        document.getElementById('show').appendChild(tableTag);
+    }    
+        function createHeader2() {
+            let titles = ['id', 'first_name', 'last_name', 'email', 'gender', 'address'];
+            let tr = document.createElement('tr');
+            for (let field of titles) {
+                let td = document.createElement('th');
+                let text = document.createTextNode(field);
+                td.appendChild(text);
+                tr.appendChild(td);
+            }
+            tableTag.appendChild(tr);
+        }
+        
+    </script>
+</script>
+</head>
+
+<body>
+
+    <h1>사원관리</h1>
+    <div id='show'></div>
+</body>
+
+</html>
